@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bnpc3x54j2idn"]
+
+[ext_resource type="Script" uid="uid://qm4f1i3r4tuy" path="res://Scripts/connected_textures.gd" id="1_ygkg1"]
+[ext_resource type="Texture2D" uid="uid://cqs2b58tsu0ht" path="res://Assets/Textures/InventorySlotTileSet1.png" id="2_ok6ex"]
+[ext_resource type="Texture2D" uid="uid://bvdwf1xp3kq3h" path="res://Assets/Textures/InventorySlotTileSet2.png" id="3_ok6ex"]
+
+[node name="ConnectedTextures" type="Node2D" unique_id=1903829542 node_paths=PackedStringArray("defaultTexture", "hoverTexture")]
+script = ExtResource("1_ygkg1")
+defaultTexture = NodePath("DefaultTexture")
+hoverTexture = NodePath("HoverTexture")
+
+[node name="DefaultTexture" type="Sprite2D" parent="." unique_id=2046351112]
+texture_filter = 1
+texture = ExtResource("2_ok6ex")
+hframes = 4
+vframes = 4
+frame = 15
+
+[node name="HoverTexture" type="Sprite2D" parent="." unique_id=277314288]
+visible = false
+texture_filter = 1
+texture = ExtResource("3_ok6ex")
+hframes = 4
+vframes = 4
