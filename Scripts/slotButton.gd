@@ -1,6 +1,6 @@
 class_name Slot extends Control
-#-----enums-----
 
+#-----enums-----
 enum TextureIndex{
 	ERROR = -1,
 	BOX,
@@ -20,20 +20,32 @@ enum TextureIndex{
 	HORIZONTAL_TUBE,
 	RIGHT_CUP,
 }
+
 #-----sub-components-----
 @export_category("Sub-Components")
 @export var TextureDict: Dictionary[String,Sprite2D]
 @export var label: Label
+
 #-----signals-----
+
 #-----variables-----
 @export_category("Variables")
 @export var scaleMax: Vector2 = Vector2(5.0, 5.0)
 var tween: Tween
+
 var inventoryCoordinate: Vector2i = Vector2i.ZERO
-var itemContained: Item
+var itemContained: Item:
+	set(value):
+		if value == null:
+			hasItem = false
+		else: 
+			hasItem = true
+		return value
+
+var hasItem: bool = false
+
 
 #-----private-----
-
 func _getTextureCoordinate(slotPosition: Vector2i, itemSize:Vector2i)->int:#returns a frame index (int)
 	var minimum: Vector2i = Vector2i.ZERO
 	var maximum: Vector2i = itemSize - Vector2i.ONE
@@ -92,7 +104,7 @@ func _resetTween()->void:
 #-----public-----
 func updateTexture(slotPosition: Vector2i, itemSize:Vector2i)->void:
 	var textureIndex: int = _getTextureCoordinate(slotPosition, itemSize)
-	print(slotPosition, " Index: ",TextureIndex.find_key(textureIndex))
+	#print(slotPosition, " Index: ",TextureIndex.find_key(textureIndex))
 	
 	for texture: String in TextureDict.keys():
 		TextureDict[texture].frame = textureIndex
@@ -100,8 +112,8 @@ func updateTexture(slotPosition: Vector2i, itemSize:Vector2i)->void:
 #-----signal responses-----
 func on_mouse_entered() -> void:
 	_resetTween()
-	tween.tween_property(TextureDict["default"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.2)
+	tween.parallel().tween_property(TextureDict["default"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.1)
 
 func on_mouse_exited() -> void:
 	_resetTween()
-	tween.tween_property(TextureDict["default"], "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.2)
+	tween.parallel().tween_property(TextureDict["default"], "modulate", Color(1.0, 1.0, 1.0, 1.0), 1)

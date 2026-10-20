@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://tkofxeb5hbe6"]
 
 [ext_resource type="Script" uid="uid://c4emdbk5bgyup" path="res://Scripts/item_grid.gd" id="1_k5gp2"]
+[ext_resource type="Script" uid="uid://dcvho74542bqw" path="res://Scripts/inventory.gd" id="1_yxepq"]
 
-[node name="Inventory" type="Control" unique_id=718738191]
+[node name="Inventory" type="Control" unique_id=718738191 node_paths=PackedStringArray("InventoryGrid")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,6 +12,8 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_yxepq")
+InventoryGrid = NodePath("ItemGrid")
 
 [node name="ItemGrid" type="GridContainer" parent="." unique_id=1752849925]
 layout_mode = 1
@@ -19,5 +22,5 @@ theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 6
 script = ExtResource("1_k5gp2")
-InventorySize = Vector2i(4, 3)
+InventorySize = Vector2i(7, 4)
 ButtonScale = 24.0

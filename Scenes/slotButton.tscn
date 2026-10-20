@@ -4,7 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://bvdwf1xp3kq3h" path="res://Assets/Textures/InventorySlotTileSet2.png" id="2_ebcs1"]
 [ext_resource type="Texture2D" uid="uid://cqs2b58tsu0ht" path="res://Assets/Textures/InventorySlotTileSet1.png" id="3_qma5i"]
 
-[node name="Button" type="Button" unique_id=2138346232 node_paths=PackedStringArray("TextureDict", "label")]
+[node name="Slot" type="Button" unique_id=2138346232 node_paths=PackedStringArray("TextureDict", "label")]
+self_modulate = Color(1, 1, 1, 0)
 offset_left = -4.0
 offset_top = -4.0
 offset_right = 4.0
