@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://bnpc3x54j2idn"]
+
+[ext_resource type="Script" uid="uid://qm4f1i3r4tuy" path="res://Scripts/slotButton.gd" id="1_uyo7w"]
+[ext_resource type="Texture2D" uid="uid://bvdwf1xp3kq3h" path="res://Assets/Textures/InventorySlotTileSet2.png" id="2_ebcs1"]
+[ext_resource type="Texture2D" uid="uid://cqs2b58tsu0ht" path="res://Assets/Textures/InventorySlotTileSet1.png" id="3_qma5i"]
+
+[node name="Button" type="Button" unique_id=2138346232 node_paths=PackedStringArray("TextureDict", "label")]
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+script = ExtResource("1_uyo7w")
+TextureDict = {
+"default": NodePath("DefaultTexture"),
+"hover": NodePath("HoverTexture")
+}
+label = NodePath("Label")
+
+[node name="HoverTexture" type="Sprite2D" parent="." unique_id=277314288]
+texture_filter = 1
+position = Vector2(4, 4)
+texture = ExtResource("2_ebcs1")
+hframes = 4
+vframes = 4
+
+[node name="DefaultTexture" type="Sprite2D" parent="." unique_id=2046351112]
+texture_filter = 1
+position = Vector2(4, 4)
+texture = ExtResource("3_qma5i")
+hframes = 4
+vframes = 4
+
+[node name="Label" type="Label" parent="." unique_id=959346371]
+layout_mode = 0
+offset_left = 0.99999964
+offset_top = 0.9999993
+offset_right = 67.66667
+offset_bottom = 67.66668
+scale = Vector2(0.09, 0.09)
+theme_override_font_sizes/font_size = 12
+text = "x:  y: "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="mouse_entered" from="." to="." method="on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="on_mouse_exited"]

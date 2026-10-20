@@ -1,20 +1,87 @@
-class_name Slot extends TextureButton
-
+class_name Slot extends Control
 #-----enums-----
 
+enum TextureIndex{
+	ERROR = -1,
+	BOX,
+	TOP_LEFT_CORNER,
+	TOP_EDGE,
+	TOP_RIGHT_CORNER,
+	TOP_CUP,
+	LEFT_EDGE,
+	BLANK_TILE,
+	RIGHT_EDGE,
+	VERTICLE_TUBE,
+	BOTTOM_LEFT_CORNER,
+	BOTTOM_EDGE,
+	BOTTOM_RIGHT_CORNER,
+	BOTTOM_CUP,
+	LEFT_CUP,
+	HORIZONTAL_TUBE,
+	RIGHT_CUP,
+}
 #-----sub-components-----
 @export_category("Sub-Components")
-@export var defaultTexture: TextureRect
-
+@export var TextureDict: Dictionary[String,Sprite2D]
+@export var label: Label
 #-----signals-----
-
 #-----variables-----
 @export_category("Variables")
 @export var scaleMax: Vector2 = Vector2(5.0, 5.0)
 var tween: Tween
-
+var inventoryCoordinate: Vector2i = Vector2i.ZERO
+var itemContained: Item
 
 #-----private-----
+
+func _getTextureCoordinate(slotPosition: Vector2i, itemSize:Vector2i)->int:#returns a frame index (int)
+	var minimum: Vector2i = Vector2i.ZERO
+	var maximum: Vector2i = itemSize - Vector2i.ONE
+	
+	if itemSize == Vector2i.ONE: #if its a 1x1 always has nothing on its sides
+		print("standalonePiece")
+		return TextureIndex.BOX
+		
+	#Check the edgecase where you need the tube type inventory slots
+	if maximum.x == 0:
+		if slotPosition.y == minimum.y:
+			return TextureIndex.TOP_CUP
+		if slotPosition.y == maximum.y:
+			return TextureIndex.BOTTOM_CUP
+		return TextureIndex.VERTICLE_TUBE
+	if maximum.y == 0:
+		if slotPosition.x == minimum.x:
+			return TextureIndex.LEFT_CUP
+		if slotPosition.x == maximum.x:
+			return TextureIndex.RIGHT_CUP
+		return TextureIndex.HORIZONTAL_TUBE
+		
+	#Check the edgecase where you only need simple corners and edges
+	if slotPosition == minimum:
+		return TextureIndex.TOP_LEFT_CORNER
+	
+	if slotPosition.x == maximum.x and  slotPosition.y == maximum.y:
+		return TextureIndex.BOTTOM_RIGHT_CORNER
+	
+	if slotPosition.x == minimum.x and slotPosition.y == maximum.y:
+		return TextureIndex.BOTTOM_LEFT_CORNER
+	
+	if slotPosition.x == maximum.x and slotPosition.y == minimum.y:
+		return TextureIndex.TOP_RIGHT_CORNER
+	
+	if slotPosition.x == minimum.x:
+		return TextureIndex.LEFT_EDGE
+	
+	if slotPosition.x == maximum.x:
+		return TextureIndex.RIGHT_EDGE
+	
+	if slotPosition.y == minimum.y:
+		return TextureIndex.TOP_EDGE
+	
+	if slotPosition.y == maximum.y:
+		return TextureIndex.BOTTOM_EDGE
+	#If not one of the edge cases then use what would be a central tile.
+	return TextureIndex.BLANK_TILE
 
 func _resetTween()->void:
 	if tween != null:
@@ -23,13 +90,18 @@ func _resetTween()->void:
 	tween.set_ease(Tween.EASE_IN_OUT)
 
 #-----public-----
+func updateTexture(slotPosition: Vector2i, itemSize:Vector2i)->void:
+	var textureIndex: int = _getTextureCoordinate(slotPosition, itemSize)
+	print(slotPosition, " Index: ",TextureIndex.find_key(textureIndex))
+	
+	for texture: String in TextureDict.keys():
+		TextureDict[texture].frame = textureIndex
 
 #-----signal responses-----
-
 func on_mouse_entered() -> void:
 	_resetTween()
-	tween.tween_property(defaultTexture, "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.2)
+	tween.tween_property(TextureDict["default"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.2)
 
 func on_mouse_exited() -> void:
 	_resetTween()
-	tween.tween_property(defaultTexture, "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.2)
+	tween.tween_property(TextureDict["default"], "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.2)

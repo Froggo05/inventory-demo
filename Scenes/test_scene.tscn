@@ -1,3 +1,16 @@
 [gd_scene format=3 uid="uid://b3611y4cbwr2o"]
 
-[node name="TestScene" type="Node2D" unique_id=1853417265]
+[ext_resource type="PackedScene" uid="uid://tkofxeb5hbe6" path="res://Scenes/inventory.tscn" id="1_3dogw"]
+
+[node name="TestScene" type="Control" unique_id=1236477037]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Inventory" parent="." unique_id=718738191 instance=ExtResource("1_3dogw")]
+layout_mode = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3

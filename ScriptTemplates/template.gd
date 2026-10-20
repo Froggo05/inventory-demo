@@ -1,4 +1,4 @@
-extends Node
+@warning_ignore("empty_file")
 #-----enums-----
 
 #-----sub-components-----
@@ -8,8 +8,6 @@ extends Node
 #-----variables-----
 
 #-----private-----
-func _physics_process(delta: float) -> void:
-	pass
 
 #-----public-----
 
