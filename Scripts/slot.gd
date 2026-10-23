@@ -27,6 +27,7 @@ enum TextureIndex{
 @export var label: Label
 
 #-----signals-----
+signal slotHovered(inventoryCoordinate: Vector2i, inventoryIndex: int)
 
 #-----variables-----
 @export_category("Variables")
@@ -34,6 +35,7 @@ enum TextureIndex{
 var tween: Tween
 
 var inventoryCoordinate: Vector2i = Vector2i.ZERO
+var inventoryIndex: int
 var itemContained: Item:
 	set(value):
 		if value == null:
@@ -41,7 +43,6 @@ var itemContained: Item:
 		else: 
 			hasItem = true
 		return value
-
 var hasItem: bool = false
 
 
@@ -111,6 +112,8 @@ func updateTexture(slotPosition: Vector2i, itemSize:Vector2i)->void:
 
 #-----signal responses-----
 func on_mouse_entered() -> void:
+	slotHovered.emit(inventoryCoordinate, inventoryIndex)
+	
 	_resetTween()
 	tween.parallel().tween_property(TextureDict["default"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.1)
 

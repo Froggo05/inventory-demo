@@ -7,16 +7,12 @@ class_name InventorySlotGridContainer extends GridContainer
 #-----signals-----
 
 #-----variables-----
-@export var InventorySize: Vector2i = Vector2i.ONE
 @export var ButtonScale: float = 1.0
 var InventoryGrid: Array = []
-
 #-----private-----
-func _ready() -> void:
-	_generateGrid(InventorySize)
 
 #-----public-----
-func _generateGrid(inventorySize: Vector2i)->void:
+func generateGrid(inventorySize: Vector2i, inventoryIndex: int)->void:
 	self.columns = inventorySize.x 
 	InventoryGrid.resize(inventorySize.x)
 	
@@ -32,7 +28,10 @@ func _generateGrid(inventorySize: Vector2i)->void:
 			slot.inventoryCoordinate = Vector2i(x,y)
 			slot.label.text = "(" + str(x) + ", " + str(y) + ")"
 			slot.updateTexture(slot.inventoryCoordinate, inventorySize)
+			slot.inventoryIndex = inventoryIndex
+			slot.slotHovered.connect(Global.updateHoveredCell)
 			InventoryGrid[x][y] = slot
 			add_child(slot)
 	print(InventoryGrid)
+
 #-----signal responses-----

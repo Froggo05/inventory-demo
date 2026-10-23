@@ -11,7 +11,7 @@ var canSeat: bool = false
 var inventoryPosition: Vector2i= Vector2.ZERO
 var positionInItem: Vector2i
 var placementConfirmationColour: Color:
-	set(value):
+	set(value): 
 		return
 	get():
 		if canSeat:
