@@ -1,3 +1,4 @@
+@tool
 extends Control
 #-----enums-----
 
@@ -10,13 +11,14 @@ var dragInstance: Drag
 
 var leftclickActive: bool = false
 
-var avaliableInventories: Array = []
+var avaliableInventories: Dictionary = {}
+
+
 #-----private-----
 func _ready() -> void:
 	for child in get_children():
 		if child is InventoryManager:
-			avaliableInventories.append(child)
-			child.inventoryIndex = avaliableInventories.size() - 1
+			avaliableInventories.set(child.IUID, child)
 
 func _updateDrag(delta)->void:
 	if dragInstance == null:
@@ -68,5 +70,6 @@ func _input(event: InputEvent) -> void:
 		_endDrag()
 
 #-----public-----
+
 
 #-----signal responses-----

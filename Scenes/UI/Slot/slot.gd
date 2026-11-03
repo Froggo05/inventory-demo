@@ -1,3 +1,4 @@
+@tool
 class_name Slot extends Control
 
 #-----enums-----
@@ -23,15 +24,17 @@ enum TextureIndex{
 
 #-----sub-components-----
 @export_category("Sub-Components")
-@export var TextureDict: Dictionary[String,Sprite2D]
+@export var TextureDict: Dictionary[String,TextureRect]
 @export var label: Label
+var atlastSize: Vector2i = Vector2i(4,4)
+var textureCellSize: Vector2 = Vector2(8.0,8.0)
 
+var sizePixels: Vector2
 #-----signals-----
-signal slotHovered(inventoryCoordinate: Vector2i, inventoryIndex: int)
+signal slotHovered(inventoryType: Vector2i, inventoryIndex: int)
 
 #-----variables-----
 @export_category("Variables")
-@export var scaleMax: Vector2 = Vector2(5.0, 5.0)
 var tween: Tween
 
 var inventoryCoordinate: Vector2i = Vector2i.ZERO
@@ -47,12 +50,22 @@ var hasItem: bool = false
 
 
 #-----private-----
-func _getTextureCoordinate(slotPosition: Vector2i, itemSize:Vector2i)->int:#returns a frame index (int)
+func _ready() -> void:
+	sizePixels = textureCellSize * Global.uiScale
+	
+	self.custom_minimum_size = sizePixels
+	for child in get_children():
+		if child is TextureRect:
+			child.size = sizePixels
+			TextureDict[child.name] = child
+		if child is Label:
+			child.size = sizePixels
+
+func _getTextureType(slotPosition: Vector2i, itemSize:Vector2i)->int:#returns a frame index (int)
 	var minimum: Vector2i = Vector2i.ZERO
 	var maximum: Vector2i = itemSize - Vector2i.ONE
 	
 	if itemSize == Vector2i.ONE: #if its a 1x1 always has nothing on its sides
-		print("standalonePiece")
 		return TextureIndex.BOX
 		
 	#Check the edgecase where you need the tube type inventory slots
@@ -104,19 +117,35 @@ func _resetTween()->void:
 
 #-----public-----
 func updateTexture(slotPosition: Vector2i, itemSize:Vector2i)->void:
-	var textureIndex: int = _getTextureCoordinate(slotPosition, itemSize)
-	#print(slotPosition, " Index: ",TextureIndex.find_key(textureIndex))
-	
-	for texture: String in TextureDict.keys():
-		TextureDict[texture].frame = textureIndex
+	var textureIndex: int = _getTextureType(slotPosition, itemSize)
+	setSprite(textureIndex)
 
 #-----signal responses-----
 func on_mouse_entered() -> void:
 	slotHovered.emit(inventoryCoordinate, inventoryIndex)
-	
 	_resetTween()
-	tween.parallel().tween_property(TextureDict["default"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.1)
+	tween.parallel().tween_property(TextureDict["DefaultTexture"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.001)
 
 func on_mouse_exited() -> void:
 	_resetTween()
-	tween.parallel().tween_property(TextureDict["default"], "modulate", Color(1.0, 1.0, 1.0, 1.0), 1)
+	tween.parallel().tween_property(TextureDict["DefaultTexture"], "modulate", Color(1.0, 1.0, 1.0, 1.0), 1)
+
+func setSprite(index: TextureIndex)->void:
+	for texture in TextureDict.keys():
+		TextureDict[texture].texture.region = getTextureAtlasRegion(index)
+
+func getTextureAtlasRegion(index: int)->Rect2:
+	print("SlotTextureIndex:", index)
+
+	var PositionX: float = index % atlastSize.y
+	@warning_ignore("integer_division")
+	var PositionY: float = round(index / atlastSize.y) #round for safety
+	
+	var cellPositionX = PositionX * textureCellSize.x
+	var cellPositionY = PositionY * textureCellSize.y
+	
+	print("Inventory Coordintate: ",self.inventoryCoordinate, " | Texture Index: ",TextureIndex.find_key(index), " | Cell Coords: (", PositionX ,",", PositionY,")" )
+	
+	var cellRegion = Rect2(cellPositionX, cellPositionY, textureCellSize.x, textureCellSize.y) #multiply by individual sprite size to get the actual region
+	
+	return cellRegion

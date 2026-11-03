@@ -1,3 +1,4 @@
+@tool
 extends Node
 #-----enums-----
 
@@ -14,7 +15,7 @@ var SelectedItem: Item
 var inventoryCount: int
 var hoveredCellCoordinate: Vector2i
 var hoveredInventoryId: int
-
+var uiScale: float = 16.0
 var mouseIsHovering: bool = false
 
 func getUniqueInventoryIndex()-> int:

@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://ce3twu7plydoh"]
+
+[ext_resource type="Script" uid="uid://ba5hv3cqbh8m3" path="res://Scenes/UI/ui.gd" id="1_nxvpl"]
+[ext_resource type="PackedScene" uid="uid://tkofxeb5hbe6" path="res://Scenes/UI/Inventory/inventory.tscn" id="1_w371h"]
+
+[node name="UI" type="Control" unique_id=1702278730]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_nxvpl")
+metadata/_edit_use_anchors_ = true
+
+[node name="Inventory" parent="." unique_id=718738191 instance=ExtResource("1_w371h")]
+layout_mode = 1
+offset_right = 512.0
+offset_bottom = 128.0
+offset_transform_enabled = true
+inventorySize = Vector2i(6, 5)

@@ -1,3 +1,4 @@
+@tool
 class_name Item extends Node2D
 
 #-----enums-----
@@ -9,7 +10,10 @@ class_name Item extends Node2D
 #-----variables-----
 @export var attributes: ItemAttributes
 @export var texture: Texture
-@export var size: Vector2i = Vector2i.ONE
+@export var gridSize: Vector2i = Vector2i.ONE
+@export var itemSize: Vector2i = Vector2i(8,8)
+var inventoryPosition : Vector3i = -Vector3i.ONE
+
 #-----private-----
 
 #-----public-----
@@ -20,4 +24,5 @@ func getTags()-> Dictionary:
 		tagDict = {attribute["name"]: attributes.get(attribute["name"])}
 	
 	return tagDict
+
 #-----signal responses-----
