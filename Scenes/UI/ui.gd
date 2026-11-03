@@ -1,8 +1,9 @@
 @tool
-extends Control
+class_name UI extends Control
 #-----enums-----
 
 #-----sub-components-----
+@onready var baseItemPacked: PackedScene = preload("uid://c681mrvm6ivda")
 
 #-----signals-----
 
@@ -11,8 +12,7 @@ var dragInstance: Drag
 
 var leftclickActive: bool = false
 
-var avaliableInventories: Dictionary = {}
-
+static var avaliableInventories: Dictionary[int, InventoryManager] = {}
 
 #-----private-----
 func _ready() -> void:
@@ -20,29 +20,29 @@ func _ready() -> void:
 		if child is InventoryManager:
 			avaliableInventories.set(child.IUID, child)
 
-func _updateDrag(delta)->void:
+func _updateDrag()->void:
 	if dragInstance == null:
 		return
-	dragInstance.setTarget(get_global_mouse_position())
-	dragInstance.updateItemPosition(delta)
+	dragInstance.setItemTarget(get_global_mouse_position())
 
 func _startDrag()->void:
 	if dragInstance != null:
-		push_warning("Last drag not finished")
-	var item = _lookUpInventorySlotHovered()
+		#push_warning("Last drag not finished")
+		dragInstance = null
+	var item = _getInventorySlotHovered()
 	if item == null:
+		#maybe add a minimum mousemovement before drag
 		print("No item in hovered slot | Drag failed")
 		return
-	print("Starting Drag")
-	dragInstance = Drag.new(item)
+	#print("Starting Drag")
+	dragInstance = Drag.new(item, self)
 
-func _lookUpInventorySlotHovered()->Item:
+func _getInventorySlotHovered()->Item:
 	if !Global.mouseIsHovering:
-		push_warning("No Inventory Hovered")
+		#push_warning("No Inventory Hovered")
 		return
-	
-	var inventory = avaliableInventories[Global.hoveredInventoryId] as InventoryManager
-	var inventorySlot = inventory.inventoryGrid[
+	var activeinventory = avaliableInventories[Global.hoveredInventoryId] as InventoryManager
+	var inventorySlot = activeinventory.inventoryGrid[
 		Global.hoveredCellCoordinate.x][
 		Global.hoveredCellCoordinate.y] as Slot
 	
@@ -52,6 +52,7 @@ func _lookUpInventorySlotHovered()->Item:
 	
 	return inventorySlot.itemContained
 
+
 func _endDrag()->void:
 	if dragInstance == null:
 		return
@@ -59,7 +60,7 @@ func _endDrag()->void:
 
 func _physics_process(delta: float) -> void:
 	if leftclickActive:
-		_updateDrag(delta)
+		_updateDrag()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Leftclick"):
@@ -71,5 +72,14 @@ func _input(event: InputEvent) -> void:
 
 #-----public-----
 
+static func getInventoryManager(iuid: int)->InventoryManager:
+	return avaliableInventories[iuid]
 
 #-----signal responses-----
+
+@onready var inventory: InventoryManager = $Inventory
+
+func _on_button_pressed() -> void:
+	var item: Item = baseItemPacked.instantiate()
+	
+	inventory.addItemToInventory(item)

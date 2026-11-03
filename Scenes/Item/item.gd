@@ -9,12 +9,22 @@ class_name Item extends Node2D
 
 #-----variables-----
 @export var attributes: ItemAttributes
-@export var texture: Texture
-@export var gridSize: Vector2i = Vector2i.ONE
-@export var itemSize: Vector2i = Vector2i(8,8)
-var inventoryPosition : Vector3i = -Vector3i.ONE
+@export var texture: Sprite2D
+@export var size: Vector2i = Vector2i(1,1)
+@export var moveFactor: float = 6.0
+var invPosition : Vector2i = -1.0 * Vector2i.ONE
+var IUID: int
+var targetPosition: Vector2
 
 #-----private-----
+func _ready() -> void:
+	texture.scale *= Global.uiScale
+
+func _physics_process(delta: float) -> void:
+	_updatePosition(delta)
+
+func _updatePosition(delta)->void:
+	self.global_position = self.global_position.slerp(targetPosition, clamp(delta * moveFactor, 0.0, 1.0))
 
 #-----public-----
 func getTags()-> Dictionary:
@@ -22,7 +32,9 @@ func getTags()-> Dictionary:
 	var attributeList = attributes.get_property_list()
 	for attribute: Dictionary in attributeList:
 		tagDict = {attribute["name"]: attributes.get(attribute["name"])}
-	
 	return tagDict
 
+func calculateItemPositionInSlots(slotSize: float)->Vector2:
+	var CentrePos:Vector2 = UI.getInventoryManager(IUID).global_position + ((invPosition * slotSize) + ((invPosition + size) * slotSize))/2
+	return CentrePos
 #-----signal responses-----

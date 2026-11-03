@@ -27,7 +27,7 @@ func generateGrid(inventorySize: Vector2i, IUID: int)->void:
 			slot.inventoryCoordinate = Vector2i(x,y)
 			slot.label.text = "(" + str(x) + ", " + str(y) + ")"
 			slot.updateTexture(slot.inventoryCoordinate, inventorySize)
-			slot.inventoryIndex = IUID
+			slot.IUID = IUID
 			if Engine.is_editor_hint():
 				pass
 			else:

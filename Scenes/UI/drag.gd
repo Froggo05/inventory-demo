@@ -1,4 +1,4 @@
-class_name Drag extends RefCounted
+class_name Drag extends Node
 #-----enums-----
 #enum dragType{}
 #-----sub-components-----
@@ -8,25 +8,32 @@ class_name Drag extends RefCounted
 #-----variables-----
 var item: Item
 var type: String #Drag type, might add later
-var position: Vector2
+var initialPosition: Vector2
 var offset: Vector2
 var dragSmoothing: float = 1.0
-var targetPosition: Vector2
+var targetinitialPos: Vector2
+var uiRef: UI
 
 #-----private-----
-func _init(targetItem: Item, dragType: String = "") -> void:
+func _init(targetItem: Item, ui: UI, dragType: String = "") -> void:
+	uiRef = ui
 	item = targetItem
 	type = dragType
+	initialPosition = item.targetPosition
 	#need to store the item slot relative to the item size clicked
 
 #-----public-----
 func endDrag()->void:
-	free()
+	if Global.mouseIsHovering:
+		var inventory: InventoryManager = uiRef.avaliableInventories[Global.hoveredInventoryId]
+		inventory.removeItem(item.invPosition, item)
+		inventory.placeItem(Global.hoveredCellCoordinate, item)
+	else:
+		setItemTarget(initialPosition)
 
-func setTarget(pos: Vector2)->void:
-	targetPosition = pos
+func setItemTarget(pos: Vector2)->void:
+	item.targetPosition = pos
 
-func updateItemPosition(delta)->void:
-	item.global_position = item.global_position.move_toward(targetPosition, delta * dragSmoothing)
+
 
 #-----signal responses-----

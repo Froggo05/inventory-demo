@@ -2,16 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://ce3twu7plydoh" path="res://Scenes/UI/UI.tscn" id="1_3dogw"]
 
-[node name="TestScene" type="Control" unique_id=1236477037]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
-mouse_default_cursor_shape = 2
+[node name="TestScene" type="CanvasLayer" unique_id=1693294405]
 
 [node name="UI" parent="." unique_id=1702278730 instance=ExtResource("1_3dogw")]
-layout_mode = 1
 mouse_default_cursor_shape = 1

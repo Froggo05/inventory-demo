@@ -31,21 +31,21 @@ var textureCellSize: Vector2 = Vector2(8.0,8.0)
 
 var sizePixels: Vector2
 #-----signals-----
-signal slotHovered(inventoryType: Vector2i, inventoryIndex: int)
+signal slotHovered(inventoryType: Vector2i, IUID: int)
 
 #-----variables-----
 @export_category("Variables")
 var tween: Tween
 
 var inventoryCoordinate: Vector2i = Vector2i.ZERO
-var inventoryIndex: int
+var IUID: int
 var itemContained: Item:
 	set(value):
 		if value == null:
 			hasItem = false
 		else: 
 			hasItem = true
-		return value
+		itemContained = value
 var hasItem: bool = false
 
 
@@ -120,22 +120,12 @@ func updateTexture(slotPosition: Vector2i, itemSize:Vector2i)->void:
 	var textureIndex: int = _getTextureType(slotPosition, itemSize)
 	setSprite(textureIndex)
 
-#-----signal responses-----
-func on_mouse_entered() -> void:
-	slotHovered.emit(inventoryCoordinate, inventoryIndex)
-	_resetTween()
-	tween.parallel().tween_property(TextureDict["DefaultTexture"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.001)
-
-func on_mouse_exited() -> void:
-	_resetTween()
-	tween.parallel().tween_property(TextureDict["DefaultTexture"], "modulate", Color(1.0, 1.0, 1.0, 1.0), 1)
-
 func setSprite(index: TextureIndex)->void:
 	for texture in TextureDict.keys():
 		TextureDict[texture].texture.region = getTextureAtlasRegion(index)
 
 func getTextureAtlasRegion(index: int)->Rect2:
-	print("SlotTextureIndex:", index)
+	#push_warning("SlotTextureIndex:", index)
 
 	var PositionX: float = index % atlastSize.y
 	@warning_ignore("integer_division")
@@ -144,8 +134,21 @@ func getTextureAtlasRegion(index: int)->Rect2:
 	var cellPositionX = PositionX * textureCellSize.x
 	var cellPositionY = PositionY * textureCellSize.y
 	
-	print("Inventory Coordintate: ",self.inventoryCoordinate, " | Texture Index: ",TextureIndex.find_key(index), " | Cell Coords: (", PositionX ,",", PositionY,")" )
+	#push_warning("Inventory Coordintate: ",self.inventoryCoordinate, " | Texture Index: ",TextureIndex.find_key(index), " | Cell Coords: (", PositionX ,",", PositionY,")" )
 	
 	var cellRegion = Rect2(cellPositionX, cellPositionY, textureCellSize.x, textureCellSize.y) #multiply by individual sprite size to get the actual region
 	
 	return cellRegion
+
+func setItem(item: Item)->void:
+	itemContained = item
+
+#-----signal responses-----
+func on_mouse_entered() -> void:
+	slotHovered.emit(inventoryCoordinate, IUID)
+	_resetTween()
+	tween.parallel().tween_property(TextureDict["DefaultTexture"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.001)
+
+func on_mouse_exited() -> void:
+	_resetTween()
+	tween.parallel().tween_property(TextureDict["DefaultTexture"], "modulate", Color(1.0, 1.0, 1.0, 1.0), 1)

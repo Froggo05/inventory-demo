@@ -2,17 +2,18 @@
 
 [ext_resource type="Script" uid="uid://d3wvgt1cvbetr" path="res://Scenes/Item/item.gd" id="1_hvuqc"]
 [ext_resource type="Script" uid="uid://bet3qcju1ttno" path="res://Scenes/Item/AttributesResource.gd" id="2_2ky4l"]
+[ext_resource type="Texture2D" uid="uid://c4c45v7jfnwu1" path="res://icon.svg" id="3_2ky4l"]
 
 [sub_resource type="Resource" id="Resource_j5x6h"]
 script = ExtResource("2_2ky4l")
 metadata/_custom_type_script = "uid://bet3qcju1ttno"
 
-[node name="Item" type="Node2D" unique_id=1501604782]
+[node name="Item" type="Node2D" unique_id=1501604782 node_paths=PackedStringArray("texture")]
 script = ExtResource("1_hvuqc")
 attributes = SubResource("Resource_j5x6h")
+texture = NodePath("Sprite")
 
-[node name="Button" type="Button" parent="." unique_id=164551143]
-offset_right = 8.0
-offset_bottom = 8.0
-scale = Vector2(16, 16)
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1478276867]
+scale = Vector2(0.063, 0.063)
+texture = ExtResource("3_2ky4l")
 metadata/_edit_use_anchors_ = true

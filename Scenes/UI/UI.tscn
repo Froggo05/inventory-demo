@@ -16,7 +16,19 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Inventory" parent="." unique_id=718738191 instance=ExtResource("1_w371h")]
 layout_mode = 1
-offset_right = 512.0
-offset_bottom = 128.0
+offset_left = 153.0
+offset_top = 62.0
+offset_right = 665.0
+offset_bottom = 574.0
 offset_transform_enabled = true
-inventorySize = Vector2i(6, 5)
+inventorySize = Vector2i(4, 4)
+
+[node name="Button" type="Button" parent="." unique_id=33942453]
+layout_mode = 0
+offset_left = 785.0
+offset_top = 319.0
+offset_right = 911.0
+offset_bottom = 350.0
+text = "Add item to inv"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
