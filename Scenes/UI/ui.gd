@@ -58,7 +58,7 @@ func _endDrag()->void:
 		return
 	dragInstance.endDrag()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if leftclickActive:
 		_updateDrag()
 

@@ -8,12 +8,14 @@
 script = ExtResource("2_2ky4l")
 metadata/_custom_type_script = "uid://bet3qcju1ttno"
 
-[node name="Item" type="Node2D" unique_id=1501604782 node_paths=PackedStringArray("texture")]
+[node name="Item" type="MarginContainer" unique_id=78478357 node_paths=PackedStringArray("texture")]
+offset_right = 128.0
+offset_bottom = 128.0
+scale = Vector2(0.008, 0.008)
 script = ExtResource("1_hvuqc")
 attributes = SubResource("Resource_j5x6h")
 texture = NodePath("Sprite")
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=1478276867]
-scale = Vector2(0.063, 0.063)
+[node name="Sprite" type="TextureRect" parent="." unique_id=925538866]
+layout_mode = 2
 texture = ExtResource("3_2ky4l")
-metadata/_edit_use_anchors_ = true

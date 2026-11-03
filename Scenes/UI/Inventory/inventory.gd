@@ -44,23 +44,23 @@ func placeItem(inventoryPos: Vector2i, item: Item)->void:
 		item.invPosition = inventoryPos
 		item.IUID = IUID
 		item.targetPosition = item.calculateItemPositionInSlots(inventoryGrid[0][0].sizePixels.x)
-		print("Place item of size: ", item.size)
-		for y in range(inventoryPos.y, inventoryPos.y + item.size.y):
-			for x in range(inventoryPos.x, inventoryPos.x + item.size.x):
+		print("Place item of size: ", item.invSize)
+		for y in range(inventoryPos.y, inventoryPos.y + item.invSize.y):
+			for x in range(inventoryPos.x, inventoryPos.x + item.invSize.x):
 				var slot = inventoryGrid[inventoryPos.x][inventoryPos.y] as Slot
 				slot.setItem(item)
 	else:
 		push_error("Cant move item: ", item)
 
 func removeItem(inventoryPos: Vector2i, item: Item)->void:
-		for y in range(inventoryPos.y, inventoryPos.y + item.size.y):
-			for x in range(inventoryPos.x, inventoryPos.x + item.size.x):
+		for y in range(inventoryPos.y, inventoryPos.y + item.invSize.y):
+			for x in range(inventoryPos.x, inventoryPos.x + item.invSize.x):
 				var slot = inventoryGrid[inventoryPos.x][inventoryPos.y] as Slot
 				slot.setItem(null)
 
 func checkItemDropPosition(inventoryPos: Vector2i, item: Item)->int:
-	for y in range(inventoryPos.y, inventoryPos.y + item.size.y):
-		for x in range(inventoryPos.x, inventoryPos.x + item.size.x):
+	for y in range(inventoryPos.y, inventoryPos.y + item.invSize.y):
+		for x in range(inventoryPos.x, inventoryPos.x + item.invSize.x):
 			var cellCheck: int = checkCell(Vector2i(x,y), item)
 			if cellCheck == SLOTCHECK.FULL:
 				return SLOTCHECK.FULL

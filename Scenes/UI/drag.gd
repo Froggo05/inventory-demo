@@ -14,6 +14,7 @@ var dragSmoothing: float = 1.0
 var targetinitialPos: Vector2
 var uiRef: UI
 
+
 #-----private-----
 func _init(targetItem: Item, ui: UI, dragType: String = "") -> void:
 	uiRef = ui
@@ -32,7 +33,7 @@ func endDrag()->void:
 		setItemTarget(initialPosition)
 
 func setItemTarget(pos: Vector2)->void:
-	item.targetPosition = pos
+	item.targetPosition = pos 
 
 
 
