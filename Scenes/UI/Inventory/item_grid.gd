@@ -26,7 +26,7 @@ func generateGrid(inventorySize: Vector2i, IUID: int)->void:
 			slot.name = str(Vector2i(x,y))
 			slot.inventoryCoordinate = Vector2i(x,y)
 			slot.label.text = "(" + str(x) + ", " + str(y) + ")"
-			slot.updateTexture(slot.inventoryCoordinate, inventorySize)
+			#slot.updateTexture(slot.inventoryCoordinate, inventorySize)
 			slot.IUID = IUID
 			if Engine.is_editor_hint():
 				pass
@@ -34,6 +34,6 @@ func generateGrid(inventorySize: Vector2i, IUID: int)->void:
 				slot.slotHovered.connect(Global.updateHoveredCell)
 			InventoryGrid[x][y] = slot
 			add_child(slot)
-	print(InventoryGrid)
+	#print(InventoryGrid)
 
 #-----signal responses-----

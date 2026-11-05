@@ -3,20 +3,22 @@
 [ext_resource type="Script" uid="uid://dcvho74542bqw" path="res://Scenes/UI/Inventory/inventory.gd" id="1_1i8xw"]
 [ext_resource type="Script" uid="uid://c4emdbk5bgyup" path="res://Scenes/UI/Inventory/item_grid.gd" id="2_1i8xw"]
 
-[node name="Inventory" type="MarginContainer" unique_id=899742553 node_paths=PackedStringArray("inventorySlotGridContainer")]
-offset_right = 512.0
-offset_bottom = 128.0
+[node name="Inventory" type="Control" unique_id=1819180068 node_paths=PackedStringArray("inventorySlotGridContainer")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 81.0
+offset_bottom = 81.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_1i8xw")
 inventorySlotGridContainer = NodePath("ItemGrid")
-inventorySize = Vector2i(4, 1)
 
 [node name="ItemGrid" type="GridContainer" parent="." unique_id=1752849925]
-layout_mode = 2
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 80.0
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
-columns = 4
 script = ExtResource("2_1i8xw")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

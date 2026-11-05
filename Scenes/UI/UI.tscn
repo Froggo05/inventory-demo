@@ -16,12 +16,13 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Inventory" parent="." unique_id=718738191 instance=ExtResource("1_w371h")]
 layout_mode = 1
-offset_left = 153.0
-offset_top = 62.0
-offset_right = 665.0
-offset_bottom = 574.0
+offset_left = 406.99997
+offset_top = 178.99998
+offset_right = 502.99997
+offset_bottom = 307.0
+scale = Vector2(0.84, 0.84)
 offset_transform_enabled = true
-inventorySize = Vector2i(4, 4)
+inventorySize = Vector2i(6, 8)
 
 [node name="Button" type="Button" parent="." unique_id=33942453]
 layout_mode = 0

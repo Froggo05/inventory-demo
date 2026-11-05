@@ -10,31 +10,29 @@ var item: Item
 var type: String #Drag type, might add later
 var initialPosition: Vector2
 var offset: Vector2
-var dragSmoothing: float = 1.0
+var dragSmoothing: float = 25.0
 var targetinitialPos: Vector2
 var uiRef: UI
-
-
+var initialItemInvPos: Vector2i
+var initialIUID: int
 #-----private-----
-func _init(targetItem: Item, ui: UI, dragType: String = "") -> void:
-	uiRef = ui
+func _init(targetItem: Item, dragType: String = "") -> void:
 	item = targetItem
+	initialItemInvPos = item.invPosition
 	type = dragType
-	initialPosition = item.targetPosition
+	initialPosition = item.global_position
+	initialIUID = item.IUID
+	UI.getInventoryManager(initialIUID).removeItem(initialItemInvPos, item)
 	#need to store the item slot relative to the item size clicked
 
 #-----public-----
 func endDrag()->void:
 	if Global.mouseIsHovering:
-		var inventory: InventoryManager = uiRef.avaliableInventories[Global.hoveredInventoryId]
-		inventory.removeItem(item.invPosition, item)
-		inventory.placeItem(Global.hoveredCellCoordinate, item)
+		UI.getInventoryManager(Global.hoveredIUID).placeItem(Global.hoveredCellCoordinate, item)
 	else:
-		setItemTarget(initialPosition)
+		UI.getInventoryManager(initialIUID).placeItem(initialItemInvPos, item)
 
-func setItemTarget(pos: Vector2)->void:
+func setItemTargetPos(pos: Vector2)->void:
 	item.targetPosition = pos 
-
-
 
 #-----signal responses-----

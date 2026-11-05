@@ -1,4 +1,4 @@
-@tool
+@tool 
 class_name InventoryManager extends Control
 
 #-----enums-----
@@ -13,7 +13,11 @@ enum SLOTCHECK{
 #-----signals-----
 
 #-----variables-----
-@export var inventorySize: Vector2i = Vector2i.ONE
+@export var inventorySize: Vector2i = Vector2i.ONE:
+	set(value):
+		inventorySize = clamp(value, Vector2i(0,0), Vector2i(50,50))
+	get():
+		return clamp(inventorySize, Vector2i(0,0), Vector2i(50,50))
 var initialMousePos: Vector2 = Vector2.ZERO
 var IUID: int
 var inventoryGrid: Array[Array]:
@@ -35,32 +39,52 @@ func addItemToInventory(item: Item)->void:
 				placeItem(Vector2i(x,y), item)
 				print("AddAdded item to: ", Vector2i(x, y))
 				return #exit the loop as has placed one item
-			else:
-				print("Cant place item: ", Vector2i(x, y))
 
 func placeItem(inventoryPos: Vector2i, item: Item)->void:
 	var cellCheck = checkItemDropPosition(inventoryPos, item)
 	if cellCheck == SLOTCHECK.EMPTY:
 		item.invPosition = inventoryPos
 		item.IUID = IUID
-		item.targetPosition = item.calculateItemPositionInSlots(inventoryGrid[0][0].sizePixels.x)
+		item.targetPosition = item.calculateItemPositionInSlots(inventoryGrid[0][0].size.x)
 		print("Place item of size: ", item.invSize)
-		for y in range(inventoryPos.y, inventoryPos.y + item.invSize.y):
-			for x in range(inventoryPos.x, inventoryPos.x + item.invSize.x):
-				var slot = inventoryGrid[inventoryPos.x][inventoryPos.y] as Slot
+		
+		var itemBounds: Vector2i = Vector2i(inventoryPos.x + item.invSize.x, inventoryPos.y + item.invSize.y)
+		var yrange = range(inventoryPos.y, itemBounds.y)
+		var xrange = range(inventoryPos.x, itemBounds.x)
+		
+		for y in yrange:
+			for x in xrange:
+				var slot = inventoryGrid[x][y] as Slot
 				slot.setItem(item)
 	else:
-		push_error("Cant move item: ", item)
+		placeItem(item.invPosition, item) #works because item.invPosition hasnt been updated by our method yet and the past position should be valid
+		push_warning("Cant move: ", item," REASON: " ,SLOTCHECK.find_key(cellCheck))
 
-func removeItem(inventoryPos: Vector2i, item: Item)->void:
-		for y in range(inventoryPos.y, inventoryPos.y + item.invSize.y):
-			for x in range(inventoryPos.x, inventoryPos.x + item.invSize.x):
-				var slot = inventoryGrid[inventoryPos.x][inventoryPos.y] as Slot
-				slot.setItem(null)
+func removeItem(inventoryPos: Vector2i, item: Item)->void:	
+	var itemBounds: Vector2i = Vector2i(inventoryPos.x + item.invSize.x, inventoryPos.y + item.invSize.y)
+	var yrange = range(inventoryPos.y, itemBounds.y)
+	var xrange = range(inventoryPos.x, itemBounds.x)
+	
+	for y in yrange:
+		for x in xrange:
+			var slot = inventoryGrid[x][y] as Slot
+			slot.removeItem()
 
 func checkItemDropPosition(inventoryPos: Vector2i, item: Item)->int:
-	for y in range(inventoryPos.y, inventoryPos.y + item.invSize.y):
-		for x in range(inventoryPos.x, inventoryPos.x + item.invSize.x):
+	var itemBounds: Vector2i = Vector2i(inventoryPos.x + item.invSize.x, inventoryPos.y + item.invSize.y)
+			
+	var yrange = range(inventoryPos.y, itemBounds.y)
+	var xrange = range(inventoryPos.x, itemBounds.x)
+	
+	if itemBounds.y > inventorySize.y:
+		#push_error("Checking out of bounds (Y)", itemBounds.y, " -> ",inventorySize.y)
+		return SLOTCHECK.NULL
+	if itemBounds.x > inventorySize.x:
+		#push_error("Checking out of bounds (X)", itemBounds.x, " -> ",inventorySize.x)
+		return SLOTCHECK.NULL
+		
+	for y in yrange:
+		for x in xrange:
 			var cellCheck: int = checkCell(Vector2i(x,y), item)
 			if cellCheck == SLOTCHECK.FULL:
 				return SLOTCHECK.FULL
@@ -82,7 +106,7 @@ func checkCell(cellPosition: Vector2i, item: Item)->int:
 #-----signal responses-----
 func _on_mouse_entered() -> void:
 	Global.mouseIsHovering = true
-	print("Mouse is hovering Inventory", Global.hoveredInventoryId)
+	#print("Mouse is hovering Inventory", Global.hoveredIUID)
 
 func _on_mouse_exited() -> void:
 	Global.mouseIsHovering = false

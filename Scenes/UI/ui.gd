@@ -23,34 +23,35 @@ func _ready() -> void:
 func _updateDrag()->void:
 	if dragInstance == null:
 		return
-	dragInstance.setItemTarget(get_global_mouse_position())
+	dragInstance.setItemTargetPos(get_global_mouse_position())
 
 func _startDrag()->void:
 	if dragInstance != null:
 		#push_warning("Last drag not finished")
 		dragInstance = null
-	var item = _getInventorySlotHovered()
+	
+	var slot = _getInventorySlotHovered()
+	if slot == null:
+		print("Not clicked on slot | Drag failed")
+		return
+	
+	var item = slot.itemContained
 	if item == null:
 		#maybe add a minimum mousemovement before drag
 		print("No item in hovered slot | Drag failed")
 		return
+	
 	#print("Starting Drag")
-	dragInstance = Drag.new(item, self)
+	dragInstance = Drag.new(item)
 
-func _getInventorySlotHovered()->Item:
+func _getInventorySlotHovered()->Slot:
 	if !Global.mouseIsHovering:
 		#push_warning("No Inventory Hovered")
 		return
-	var activeinventory = avaliableInventories[Global.hoveredInventoryId] as InventoryManager
-	var inventorySlot = activeinventory.inventoryGrid[
-		Global.hoveredCellCoordinate.x][
-		Global.hoveredCellCoordinate.y] as Slot
+	var activeinventory = getInventoryManager(Global.hoveredIUID)
+	var inventorySlot = activeinventory.inventoryGrid[Global.hoveredCellCoordinate.x][Global.hoveredCellCoordinate.y] as Slot
 	
-	if !inventorySlot.hasItem:
-		print("No item in slot")
-		return
-	
-	return inventorySlot.itemContained
+	return inventorySlot
 
 
 func _endDrag()->void:

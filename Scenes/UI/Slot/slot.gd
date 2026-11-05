@@ -143,6 +143,9 @@ func getTextureAtlasRegion(index: int)->Rect2:
 func setItem(item: Item)->void:
 	itemContained = item
 
+func removeItem()->void:
+	itemContained = null
+
 #-----signal responses-----
 func on_mouse_entered() -> void:
 	slotHovered.emit(inventoryCoordinate, IUID)
