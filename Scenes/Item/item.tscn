@@ -12,20 +12,20 @@ metadata/_custom_type_script = "uid://bet3qcju1ttno"
 custom_maximum_size = Vector2(128, 128)
 layout_mode = 3
 anchors_preset = 0
-offset_left = 1.0951319e-05
-offset_top = 1.0951319e-05
-offset_right = 79.99992
-offset_bottom = 79.94431
+offset_right = 64.0
+offset_bottom = 64.0
 offset_transform_enabled = true
 mouse_filter = 2
 script = ExtResource("1_hvuqc")
 attributes = SubResource("Resource_j5x6h")
 sprite = NodePath("Sprite")
+invSize = Vector2i(1, 2)
+moveFactor = 1000.0
 
 [node name="Sprite" type="TextureRect" parent="." unique_id=925538866]
 layout_mode = 0
 offset_right = 128.0
 offset_bottom = 128.0
-scale = Vector2(0.125, 0.125)
+scale = Vector2(0.5, 0.5)
 mouse_filter = 2
 texture = ExtResource("3_2ky4l")

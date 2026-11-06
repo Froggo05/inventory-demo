@@ -45,8 +45,8 @@ func placeItem(inventoryPos: Vector2i, item: Item)->void:
 	if cellCheck == SLOTCHECK.EMPTY:
 		item.invPosition = inventoryPos
 		item.IUID = IUID
-		item.targetPosition = item.calculateItemPositionInSlots(inventoryGrid[0][0].size.x)
-		print("Place item of size: ", item.invSize)
+		item.targetPosition = item.calculateItemPositionInSlots(inventoryGrid[inventoryPos.x][inventoryPos.y].sizePixels)
+		#print("Place item of size: ", item.invSize)
 		
 		var itemBounds: Vector2i = Vector2i(inventoryPos.x + item.invSize.x, inventoryPos.y + item.invSize.y)
 		var yrange = range(inventoryPos.y, itemBounds.y)

@@ -15,8 +15,10 @@ var SelectedItem: Item
 var inventoryCount: int
 var hoveredCellCoordinate: Vector2i
 var hoveredIUID: int
-var uiScale: float = 8.0
+var uiScale: Vector2 = Vector2(8.0,8.0)
 var mouseIsHovering: bool = false
+
+const invCellPixelSize: float = 8.0
 
 func getUniqueInventoryIndex()-> int:
 	inventoryCount += 1
