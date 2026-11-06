@@ -18,9 +18,8 @@ var targetPosition: Vector2
 
 #-----private-----
 func _ready() -> void:
-	sprite.scale = Global.uiScale/((sprite.texture.get_size() / Global.invCellPixelSize)) #calculate the ratio between this image and the inv slot tile size img
+	sprite.scale = Global.uiScale/(sprite.texture.get_size() / Global.invCellPixelSize) #calculate the ratio between this image and the inv slot tile size img
 	print(sprite.scale)
-	#position = sprite.scale * sprite.texture.get_size()
 	self.custom_minimum_size = sprite.size
 	pass
 

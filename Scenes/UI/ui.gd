@@ -24,6 +24,7 @@ func _updateDrag()->void:
 	if dragInstance == null:
 		return
 	dragInstance.setItemTargetPos(get_global_mouse_position())
+	dragInstance.update()
 
 func _startDrag()->void:
 	if dragInstance != null:
@@ -75,6 +76,16 @@ func _input(event: InputEvent) -> void:
 
 static func getInventoryManager(iuid: int)->InventoryManager:
 	return avaliableInventories[iuid]
+
+static func getSlot(invPosition:Vector2i ,iuid: int)->Slot:
+	var inv = getInventoryManager(iuid)
+	if invPosition.x > inv.inventorySize.x - 1 or invPosition.y > inv.inventorySize.y - 1:
+		print("Slot outside of bounds")
+		return null
+	
+	var slot = inv.inventoryGrid[invPosition.x][invPosition.y]
+	return slot
+
 
 #-----signal responses-----
 

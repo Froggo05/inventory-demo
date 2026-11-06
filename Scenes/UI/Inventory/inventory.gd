@@ -3,6 +3,7 @@ class_name InventoryManager extends Control
 
 #-----enums-----
 enum SLOTCHECK{
+	BLANK= -2,
 	NULL = -1,
 	EMPTY,
 	FULL,
@@ -35,7 +36,7 @@ func addItemToInventory(item: Item)->void:
 	for y in range(inventorySize.y):
 		for x in range(inventorySize.x):
 			if checkItemDropPosition(Vector2i(x,y), item) == SLOTCHECK.EMPTY:
-				add_child(item)
+				owner.add_child(item)
 				placeItem(Vector2i(x,y), item)
 				print("AddAdded item to: ", Vector2i(x, y))
 				return #exit the loop as has placed one item
@@ -57,7 +58,7 @@ func placeItem(inventoryPos: Vector2i, item: Item)->void:
 				var slot = inventoryGrid[x][y] as Slot
 				slot.setItem(item)
 	else:
-		placeItem(item.invPosition, item) #works because item.invPosition hasnt been updated by our method yet and the past position should be valid
+		UI.getInventoryManager(item.IUID).placeItem(item.invPosition, item) #works because item.invPosition hasnt been updated by our method yet and the past position should be valid
 		push_warning("Cant move: ", item," REASON: " ,SLOTCHECK.find_key(cellCheck))
 
 func removeItem(inventoryPos: Vector2i, item: Item)->void:	
@@ -67,8 +68,9 @@ func removeItem(inventoryPos: Vector2i, item: Item)->void:
 	
 	for y in yrange:
 		for x in xrange:
-			var slot = inventoryGrid[x][y] as Slot
+			var slot = UI.getSlot(Vector2i(x,y),IUID)
 			slot.removeItem()
+
 
 func checkItemDropPosition(inventoryPos: Vector2i, item: Item)->int:
 	var itemBounds: Vector2i = Vector2i(inventoryPos.x + item.invSize.x, inventoryPos.y + item.invSize.y)
@@ -89,9 +91,10 @@ func checkItemDropPosition(inventoryPos: Vector2i, item: Item)->int:
 			if cellCheck == SLOTCHECK.FULL:
 				return SLOTCHECK.FULL
 			if cellCheck == SLOTCHECK.SAME:
-				return SLOTCHECK.FULL
+				return SLOTCHECK.SAME
 	#If the slots are
 	return SLOTCHECK.EMPTY
+
 
 func checkCell(cellPosition: Vector2i, item: Item)->int:
 	var slot: = inventoryGrid[cellPosition.x][cellPosition.y] as Slot

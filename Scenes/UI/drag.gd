@@ -15,6 +15,9 @@ var targetinitialPos: Vector2
 var uiRef: UI
 var initialItemInvPos: Vector2i
 var initialIUID: int
+
+var lastSlotsCheckedArray: Array[Slot] = []
+
 #-----private-----
 func _init(targetItem: Item, dragType: String = "") -> void:
 	item = targetItem
@@ -25,14 +28,43 @@ func _init(targetItem: Item, dragType: String = "") -> void:
 	UI.getInventoryManager(initialIUID).removeItem(initialItemInvPos, item)
 	#need to store the item slot relative to the item size clicked
 
+func _visualiseCheck(hoveredInvIUID: int, inventoryPos: Vector2i)->void:
+	var check = UI.getInventoryManager(hoveredInvIUID).checkItemDropPosition(inventoryPos, item)
+	
+	var itemBounds: Vector2i = Vector2i(inventoryPos.x + item.invSize.x, inventoryPos.y + item.invSize.y)
+	var yrange = range(inventoryPos.y, itemBounds.y)
+	var xrange = range(inventoryPos.x, itemBounds.x)
+	
+	for y in yrange:
+		for x in xrange:
+			var slot = UI.getSlot(Vector2i(x,y), Global.hoveredIUID) as Slot
+			if slot == null:
+				push_error("trying to look outside of inv bounds")
+				return
+			lastSlotsCheckedArray.append(slot)
+			slot.visualiseCheck(check)
+			slot.animateHover()
+
+func _resetSlotHighlight()->void:
+	for slot in lastSlotsCheckedArray:
+		slot.visualiseCheck(InventoryManager.SLOTCHECK.BLANK)
+		lastSlotsCheckedArray = []
+
 #-----public-----
 func endDrag()->void:
 	if Global.mouseIsHovering:
 		UI.getInventoryManager(Global.hoveredIUID).placeItem(Global.hoveredCellCoordinate, item)
 	else:
 		UI.getInventoryManager(initialIUID).placeItem(initialItemInvPos, item)
+	_resetSlotHighlight()
+
+func update()->void:
+	if Global.mouseIsHovering:
+		_resetSlotHighlight()
+		_visualiseCheck(Global.hoveredIUID, Global.hoveredCellCoordinate)
+
 
 func setItemTargetPos(pos: Vector2)->void:
-	item.targetPosition = pos 
+	item.global_position = pos 
 
 #-----signal responses-----

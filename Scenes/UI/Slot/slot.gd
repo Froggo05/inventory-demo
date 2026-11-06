@@ -146,12 +146,30 @@ func setItem(item: Item)->void:
 func removeItem()->void:
 	itemContained = null
 
+func visualiseCheck(slotCheck: int)->void: 
+	match slotCheck:
+		InventoryManager.SLOTCHECK.NULL:
+			modulate = Color(1.0, 0.0, 0.0, 1.0)
+		InventoryManager.SLOTCHECK.EMPTY:
+			modulate = Color(0.0, 9.419, 0.0)
+		InventoryManager.SLOTCHECK.FULL:
+			modulate = Color(9.419, 0.0, 0.0, 1.0)
+		InventoryManager.SLOTCHECK.SAME:
+			modulate = Color(9.419, 9.419, 0.0, 1.0)
+		InventoryManager.SLOTCHECK.BLANK:
+			modulate = Color(1.0, 1.0, 1.0, 1.0)
+
 #-----signal responses-----
 func on_mouse_entered() -> void:
 	slotHovered.emit(inventoryCoordinate, IUID)
-	_resetTween()
-	tween.parallel().tween_property(TextureDict["DefaultTexture"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.001)
+	animateHover()
 
 func on_mouse_exited() -> void:
+	animateHoverDisolve()
+
+func animateHover()->void:
+	_resetTween()
+	tween.parallel().tween_property(TextureDict["DefaultTexture"], "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.001)
+func animateHoverDisolve()->void:
 	_resetTween()
 	tween.parallel().tween_property(TextureDict["DefaultTexture"], "modulate", Color(1.0, 1.0, 1.0, 1.0), 1)
