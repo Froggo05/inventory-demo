@@ -39,7 +39,7 @@ func _visualiseCheck(hoveredInvIUID: int, inventoryPos: Vector2i)->void:
 		for x in xrange:
 			var slot = UI.getSlot(Vector2i(x,y), Global.hoveredIUID) as Slot
 			if slot == null:
-				push_error("trying to look outside of inv bounds")
+				#push_error("trying to look outside of inv bounds")
 				return
 			lastSlotsCheckedArray.append(slot)
 			slot.visualiseCheck(check)
@@ -48,6 +48,7 @@ func _visualiseCheck(hoveredInvIUID: int, inventoryPos: Vector2i)->void:
 func _resetSlotHighlight()->void:
 	for slot in lastSlotsCheckedArray:
 		slot.visualiseCheck(InventoryManager.SLOTCHECK.BLANK)
+		slot.animateHoverDisolve()
 		lastSlotsCheckedArray = []
 
 #-----public-----
@@ -62,7 +63,8 @@ func update()->void:
 	if Global.mouseIsHovering:
 		_resetSlotHighlight()
 		_visualiseCheck(Global.hoveredIUID, Global.hoveredCellCoordinate)
-
+	else:
+		_resetSlotHighlight()
 
 func setItemTargetPos(pos: Vector2)->void:
 	item.global_position = pos 

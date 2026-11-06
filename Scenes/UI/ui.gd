@@ -20,6 +20,18 @@ func _ready() -> void:
 		if child is InventoryManager:
 			avaliableInventories.set(child.IUID, child)
 
+func _physics_process(_delta: float) -> void:
+	if leftclickActive:
+		_updateDrag()
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("Leftclick"):
+		leftclickActive = true
+		_startDrag()
+	if event.is_action_released("Leftclick"):
+		leftclickActive = false
+		_endDrag()
+
 func _updateDrag()->void:
 	if dragInstance == null:
 		return
@@ -54,38 +66,13 @@ func _getInventorySlotHovered()->Slot:
 	
 	return inventorySlot
 
-
 func _endDrag()->void:
 	if dragInstance == null:
 		return
 	dragInstance.endDrag()
 
-func _physics_process(_delta: float) -> void:
-	if leftclickActive:
-		_updateDrag()
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("Leftclick"):
-		leftclickActive = true
-		_startDrag()
-	if event.is_action_released("Leftclick"):
-		leftclickActive = false
-		_endDrag()
 
 #-----public-----
-
-static func getInventoryManager(iuid: int)->InventoryManager:
-	return avaliableInventories[iuid]
-
-static func getSlot(invPosition:Vector2i ,iuid: int)->Slot:
-	var inv = getInventoryManager(iuid)
-	if invPosition.x > inv.inventorySize.x - 1 or invPosition.y > inv.inventorySize.y - 1:
-		print("Slot outside of bounds")
-		return null
-	
-	var slot = inv.inventoryGrid[invPosition.x][invPosition.y]
-	return slot
-
 
 #-----signal responses-----
 
@@ -95,3 +82,17 @@ func _on_button_pressed() -> void:
 	var item: Item = baseItemPacked.instantiate()
 	
 	inventory.addItemToInventory(item)
+
+#----static-----
+
+static func getInventoryManager(iuid: int)->InventoryManager:
+	return avaliableInventories[iuid]
+
+static func getSlot(invPosition:Vector2i ,iuid: int)->Slot:
+	var inv = getInventoryManager(iuid)
+	if invPosition.x > inv.inventorySize.x - 1 or invPosition.y > inv.inventorySize.y - 1:
+		#print("Slot outside of bounds")
+		return null
+	
+	var slot = inv.inventoryGrid[invPosition.x][invPosition.y]
+	return slot

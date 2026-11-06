@@ -22,15 +22,13 @@ enum SLOTCHECK{
 var initialMousePos: Vector2 = Vector2.ZERO
 var IUID: int
 var inventoryGrid: Array[Array]:
-	set(value):
-		return
 	get():
 		return inventorySlotGridContainer.InventoryGrid
 #-----private-----
 func _ready() -> void:
 	IUID = UID.GENERATEINVENTORYINDEX()
 	inventorySlotGridContainer.generateGrid(inventorySize, IUID)
-	
+
 #-----public-----
 func addItemToInventory(item: Item)->void:
 	for y in range(inventorySize.y):
@@ -71,7 +69,6 @@ func removeItem(inventoryPos: Vector2i, item: Item)->void:
 			var slot = UI.getSlot(Vector2i(x,y),IUID)
 			slot.removeItem()
 
-
 func checkItemDropPosition(inventoryPos: Vector2i, item: Item)->int:
 	var itemBounds: Vector2i = Vector2i(inventoryPos.x + item.invSize.x, inventoryPos.y + item.invSize.y)
 			
@@ -95,7 +92,6 @@ func checkItemDropPosition(inventoryPos: Vector2i, item: Item)->int:
 	#If the slots are
 	return SLOTCHECK.EMPTY
 
-
 func checkCell(cellPosition: Vector2i, item: Item)->int:
 	var slot: = inventoryGrid[cellPosition.x][cellPosition.y] as Slot
 	if slot.hasItem:
@@ -113,7 +109,6 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	Global.mouseIsHovering = false
-
 
 func _on_item_grid_resized() -> void:
 	size = inventorySlotGridContainer.size

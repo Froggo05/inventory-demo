@@ -5,4 +5,3 @@
 [node name="TestScene" type="CanvasLayer" unique_id=1693294405]
 
 [node name="UI" parent="." unique_id=1702278730 instance=ExtResource("1_3dogw")]
-mouse_default_cursor_shape = 1
