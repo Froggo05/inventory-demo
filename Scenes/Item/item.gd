@@ -40,7 +40,7 @@ func getTags()-> Dictionary:
 
 func calculateItemPositionInSlots(slotSize: Vector2)->Vector2:
 	var avgPos: Vector2 = ((Vector2(invPosition) + Vector2(invPosition) + Vector2(invSize - Vector2i.ONE))/2 * slotSize)
-	var CentrePos: Vector2 = UI.getInventoryManager(IUID).global_position + avgPos
+	var CentrePos: Vector2 = UI.getInventoryManager(IUID).position + avgPos
 	#invetnory pos (for offset) + avg position of first and last cell for center point
 	return CentrePos
 #-----signal responses-----
